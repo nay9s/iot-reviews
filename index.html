@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบทบทวนข้อสอบวิชา IoT (Internet of Things Exam Review)</title>
+  <meta name="description" content="เว็บทบทวนข้อสอบวิชา IoT สรุปเนื้อหา 5 บทตามแนวข้อสอบ และแบบทดสอบ 150 ข้อพร้อมเฉลยละเอียด">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="#home" class="logo-link">
+        <span class="logo-badge" id="logoIconBadge"></span>
+        <span>IoT Exam Review</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="desktop-nav">
+        <a href="#home" class="nav-item active" data-nav="home">
+          <span id="navHomeIcon"></span>
+          <span>หน้าหลัก</span>
+        </a>
+        <a href="#chapters" class="nav-item" data-nav="chapters">
+          <span id="navChaptersIcon"></span>
+          <span>สรุปเนื้อหา 5 บท</span>
+        </a>
+        <a href="#quiz-hub" class="nav-item" data-nav="quiz-hub">
+          <span id="navQuizIcon"></span>
+          <span>ศูนย์แบบทดสอบ</span>
+        </a>
+        <a href="#settings" class="nav-item" data-nav="settings">
+          <span id="navSettingsIcon"></span>
+          <span>ตั้งค่าและประวัติ</span>
+        </a>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">
+          <!-- Populated by JS -->
+        </button>
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu">
+          <!-- Populated by JS -->
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Drawer -->
+  <div id="mobileDrawerOverlay" class="mobile-drawer-overlay"></div>
+  <aside id="mobileDrawer" class="mobile-drawer">
+    <div class="mobile-drawer-header">
+      <div style="font-family: var(--font-heading); font-weight: 700; font-size: 17px;">
+        เมนูระบบทบทวน
+      </div>
+      <button id="btnCloseDrawer" class="theme-toggle-btn" aria-label="Close Drawer">
+        <!-- Close icon injected by JS -->
+      </button>
+    </div>
+    <nav class="mobile-nav-links">
+      <a href="#home" class="nav-item active" data-nav="home">
+        <span class="m-nav-icon-home"></span>
+        <span>หน้าหลัก</span>
+      </a>
+      <a href="#chapters" class="nav-item" data-nav="chapters">
+        <span class="m-nav-icon-chapters"></span>
+        <span>สรุปเนื้อหา 5 บท</span>
+      </a>
+      <a href="#quiz-hub" class="nav-item" data-nav="quiz-hub">
+        <span class="m-nav-icon-quiz"></span>
+        <span>ศูนย์แบบทดสอบ (150 ข้อ)</span>
+      </a>
+      <a href="#settings" class="nav-item" data-nav="settings">
+        <span class="m-nav-icon-settings"></span>
+        <span>ตั้งค่าและประวัติการสอบ</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Dynamic Application Container -->
+  <main id="app-root" class="main-content">
+    <!-- Populated dynamically by js/app.js -->
+  </main>
+
+  <!-- Quiz Settings Modal -->
+  <div id="quizSettingsModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <div id="modalQuizTitle" class="modal-title">เริ่มทำแบบทดสอบ</div>
+          <div id="modalQuizSubtitle" style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;"></div>
+        </div>
+        <button id="btnModalClose" class="theme-toggle-btn" aria-label="Close Modal"></button>
+      </div>
+
+      <!-- Settings Content -->
+      <div class="setting-group">
+        <span class="setting-label">การสลับสุ่ม (Randomization)</span>
+        
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <span class="toggle-name">สุ่มลำดับข้อสอบ</span>
+            <span class="toggle-desc">สลับลำดับคำถามไม่ให้เรียงตามต้นฉบับ</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="chkShuffleQuestions" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <span class="toggle-name">สุ่มลำดับตัวเลือก (ก, ข, ค, ง)</span>
+            <span class="toggle-desc">สลับลำดับชอยส์เพื่อป้องกันการจำตำแหน่ง</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="chkShuffleChoices" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Feedback Mode Setting -->
+      <div class="setting-group">
+        <span class="setting-label">โหมดการตรวจคำตอบ (Feedback Mode)</span>
+        <div class="radio-cards">
+          <label class="radio-card">
+            <input type="radio" name="feedbackMode" value="instant" checked>
+            <div>
+              <div style="font-family: var(--font-heading); font-weight: 600; font-size: 14.5px;">เฉลยทันทีข้อต่อข้อ (Instant Mode)</div>
+              <div style="font-size: 13px; color: var(--text-muted);">
+                ตรวจคำตอบทันทีเมื่อเลือก พร้อมแสดงเฉลยและคำอธิบายละเอียดก่อนกดไปข้อถัดไป
+              </div>
+            </div>
+          </label>
+
+          <label class="radio-card">
+            <input type="radio" name="feedbackMode" value="exam">
+            <div>
+              <div style="font-family: var(--font-heading); font-weight: 600; font-size: 14.5px;">เฉลยหลังจากทำเสร็จทั้งหมด (Exam Mode)</div>
+              <div style="font-size: 13px; color: var(--text-muted);">
+                จำลองการสอบจริง ไม่บอกคำตอบระหว่างทำ สามารถข้ามข้อ ย้อนกลับ และดูคะแนนพร้อมเฉลยทั้งหมดตอนส่ง
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Question Count for All Chapters Mode -->
+      <div class="setting-group" id="modalQuestionCountGroup">
+        <span class="setting-label">จำนวนข้อสอบที่ต้องการทำ</span>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+          <label class="radio-card" style="justify-content: center; text-align: center; padding: 10px;">
+            <input type="radio" name="questionCountOption" value="30">
+            <span style="font-weight: 600; font-size: 14px;">30 ข้อ</span>
+          </label>
+          <label class="radio-card" style="justify-content: center; text-align: center; padding: 10px;">
+            <input type="radio" name="questionCountOption" value="60">
+            <span style="font-weight: 600; font-size: 14px;">60 ข้อ</span>
+          </label>
+          <label class="radio-card" style="justify-content: center; text-align: center; padding: 10px;">
+            <input type="radio" name="questionCountOption" value="100">
+            <span style="font-weight: 600; font-size: 14px;">100 ข้อ</span>
+          </label>
+          <label class="radio-card active" style="justify-content: center; text-align: center; padding: 10px;">
+            <input type="radio" name="questionCountOption" value="150" checked>
+            <span style="font-weight: 600; font-size: 14px;">ครบ 150 ข้อ</span>
+          </label>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-secondary" onclick="document.getElementById('quizSettingsModal').classList.remove('active')">
+          ยกเลิก
+        </button>
+        <button class="btn btn-primary" id="btnConfirmStartQuiz">
+          เริ่มทำแบบทดสอบ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+      <p style="font-weight: 500;">ระบบเว็บแอปพลิเคชันสำหรับทบทวนแนวข้อสอบวิชา IoT (Internet of Things)</p>
+      <p style="color: var(--text-muted); font-size: 13px;">
+        เนื้อหาอ้างอิงจากตำราเรียนและแนวข้อสอบ 5 บทเรียน | ออกแบบด้วย Minimalist UX/UI รองรับ Dark Mode และ Responsive ทุกอุปกรณ์
+      </p>
+    </div>
+  </footer>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile Navigation">
+    <a href="#home" class="bottom-nav-item active" data-nav="home">
+      <span class="bottom-nav-icon" id="bottomNavHomeIcon"></span>
+      <span class="bottom-nav-label">หน้าหลัก</span>
+    </a>
+    <a href="#chapters" class="bottom-nav-item" data-nav="chapters">
+      <span class="bottom-nav-icon" id="bottomNavChaptersIcon"></span>
+      <span class="bottom-nav-label">สรุป 5 บท</span>
+    </a>
+    <a href="#quiz-hub" class="bottom-nav-item" data-nav="quiz-hub">
+      <span class="bottom-nav-icon" id="bottomNavQuizIcon"></span>
+      <span class="bottom-nav-label">ศูนย์ข้อสอบ</span>
+    </a>
+    <a href="#settings" class="bottom-nav-item" data-nav="settings">
+      <span class="bottom-nav-icon" id="bottomNavSettingsIcon"></span>
+      <span class="bottom-nav-label">ตั้งค่า</span>
+    </a>
+  </nav>
+
+  <!-- Scripts -->
+  <script src="js/icons.js"></script>
+  <script src="js/data/chapters.js"></script>
+  <script src="js/data/questions.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Inject Static Icons via JS helper -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.getIcon) {
+        document.getElementById('logoIconBadge').innerHTML = window.getIcon('layers');
+        document.getElementById('navHomeIcon').innerHTML = window.getIcon('home');
+        document.getElementById('navChaptersIcon').innerHTML = window.getIcon('book-open');
+        document.getElementById('navQuizIcon').innerHTML = window.getIcon('help-circle');
+        document.getElementById('navSettingsIcon').innerHTML = window.getIcon('settings');
+        document.getElementById('mobileMenuBtn').innerHTML = window.getIcon('menu');
+        document.getElementById('btnCloseDrawer').innerHTML = window.getIcon('x');
+        document.getElementById('btnModalClose').innerHTML = window.getIcon('x');
+
+        // Bottom Nav Icons
+        document.getElementById('bottomNavHomeIcon').innerHTML = window.getIcon('home');
+        document.getElementById('bottomNavChaptersIcon').innerHTML = window.getIcon('book-open');
+        document.getElementById('bottomNavQuizIcon').innerHTML = window.getIcon('help-circle');
+        document.getElementById('bottomNavSettingsIcon').innerHTML = window.getIcon('settings');
+
+        document.querySelectorAll('.m-nav-icon-home').forEach(el => el.innerHTML = window.getIcon('home'));
+        document.querySelectorAll('.m-nav-icon-chapters').forEach(el => el.innerHTML = window.getIcon('book-open'));
+        document.querySelectorAll('.m-nav-icon-quiz').forEach(el => el.innerHTML = window.getIcon('help-circle'));
+        document.querySelectorAll('.m-nav-icon-settings').forEach(el => el.innerHTML = window.getIcon('settings'));
+      }
+    });
+  </script>
+</body>
+</html>
